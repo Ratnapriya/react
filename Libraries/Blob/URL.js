@@ -7,6 +7,7 @@
  * of patent rights can be found in the PATENTS file in the same directory.
  *
  * @providesModule URL
+ * @format
  * @flow
  */
 
@@ -14,11 +15,11 @@
 
 const Blob = require('Blob');
 
-const { BlobModule } = require('NativeModules');
+const {BlobModule} = require('NativeModules');
 
 let BLOB_URL_PREFIX = null;
 
-if (typeof BlobModule.BLOB_URI_SCHEME === 'string') {
+if (BlobModule && typeof BlobModule.BLOB_URI_SCHEME === 'string') {
   BLOB_URL_PREFIX = BlobModule.BLOB_URI_SCHEME + ':';
   if (typeof BlobModule.BLOB_URI_HOST === 'string') {
     BLOB_URL_PREFIX += `//${BlobModule.BLOB_URI_HOST}/`;
@@ -58,7 +59,9 @@ class URL {
     if (BLOB_URL_PREFIX === null) {
       throw new Error('Cannot create URL for blob!');
     }
-    return `${BLOB_URL_PREFIX}${blob.blobId}?offset=${blob.offset}&size=${blob.size}`;
+    return `${BLOB_URL_PREFIX}${blob.blobId}?offset=${blob.offset}&size=${
+      blob.size
+    }`;
   }
 
   static revokeObjectURL(url: string) {

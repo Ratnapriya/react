@@ -145,21 +145,19 @@ function createStackEntry(props: any): any {
  * set by the static API will get overriden by the one set by the component in
  * the next render.
  *
- * ### Constants
+ * ### Constants
  *
  * `currentHeight` (Android only) The height of the status bar.
  */
-class StatusBar extends React.Component {
-  props: {
-    hidden?: boolean,
-    animated?: boolean,
-    backgroundColor?: string,
-    translucent?: boolean,
-    barStyle?: 'default' | 'light-content' | 'dark-content',
-    networkActivityIndicatorVisible?: boolean,
-    showHideTransition?: 'fade' | 'slide',
-  };
-
+class StatusBar extends React.Component<{
+  hidden?: boolean,
+  animated?: boolean,
+  backgroundColor?: string,
+  translucent?: boolean,
+  barStyle?: 'default' | 'light-content' | 'dark-content',
+  networkActivityIndicatorVisible?: boolean,
+  showHideTransition?: 'fade' | 'slide',
+}> {
   static _propsStack = [];
 
   static _defaultProps = createStackEntry({
@@ -326,7 +324,6 @@ class StatusBar extends React.Component {
   componentWillUnmount() {
     // When a StatusBar is unmounted, remove itself from the stack and update
     // the native bar with the next props.
-    // $FlowFixMe found when converting React.createClass to ES6
     const index = StatusBar._propsStack.indexOf(this._stackEntry);
     StatusBar._propsStack.splice(index, 1);
 
@@ -334,7 +331,6 @@ class StatusBar extends React.Component {
   }
 
   componentDidUpdate() {
-    // $FlowFixMe found when converting React.createClass to ES6
     const index = StatusBar._propsStack.indexOf(this._stackEntry);
     this._stackEntry = createStackEntry(this.props);
     StatusBar._propsStack[index] = this._stackEntry;
@@ -410,7 +406,7 @@ class StatusBar extends React.Component {
     });
   };
 
-  render(): ?React.Element<any> {
+  render(): React.Node {
     return null;
   }
 }

@@ -50,6 +50,8 @@ static RCTFontWeight weightOfFont(UIFont *font)
       @"regular",
       @"medium",
       @"semibold",
+      @"demibold",
+      @"extrabold",
       @"bold",
       @"heavy",
       @"black"
@@ -62,6 +64,8 @@ static RCTFontWeight weightOfFont(UIFont *font)
       @(UIFontWeightRegular),
       @(UIFontWeightMedium),
       @(UIFontWeightSemibold),
+      @(UIFontWeightSemibold),
+      @(UIFontWeightHeavy),
       @(UIFontWeightBold),
       @(UIFontWeightHeavy),
       @(UIFontWeightBlack)

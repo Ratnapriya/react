@@ -20,6 +20,7 @@ const ReactNative = {
   get ActivityIndicator() { return require('ActivityIndicator'); },
   get ART() { return require('ReactNativeART'); },
   get Button() { return require('Button'); },
+  get CheckBox() { return require('CheckBox'); },
   get DatePickerIOS() { return require('DatePickerIOS'); },
   get DrawerLayoutAndroid() { return require('DrawerLayoutAndroid'); },
   get FlatList() { return require('FlatList'); },
@@ -36,6 +37,7 @@ const ReactNative = {
   get PickerIOS() { return require('PickerIOS'); },
   get ProgressBarAndroid() { return require('ProgressBarAndroid'); },
   get ProgressViewIOS() { return require('ProgressViewIOS'); },
+  get SafeAreaView() { return require('SafeAreaView'); },
   get ScrollView() { return require('ScrollView'); },
   get SectionList() { return require('SectionList'); },
   get SegmentedControlIOS() { return require('SegmentedControlIOS'); },
@@ -44,6 +46,7 @@ const ReactNative = {
   get Switch() { return require('Switch'); },
   get RefreshControl() { return require('RefreshControl'); },
   get StatusBar() { return require('StatusBar'); },
+  get SwipeableFlatList() { return require('SwipeableFlatList'); },
   get SwipeableListView() { return require('SwipeableListView'); },
   get TabBarIOS() { return require('TabBarIOS'); },
   get Text() { return require('Text'); },
@@ -100,6 +103,7 @@ const ReactNative = {
   get unstable_batchedUpdates() { return require('ReactNative').unstable_batchedUpdates; },
   get Vibration() { return require('Vibration'); },
   get VibrationIOS() { return require('VibrationIOS'); },
+  get YellowBox() { return require('YellowBox'); },
 
   // Plugins
   get DeviceEventEmitter() { return require('RCTDeviceEventEmitter'); },

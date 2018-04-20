@@ -10,7 +10,6 @@
  * @flow
  */
 
-/* eslint-disable strict */
 /* globals window: true */
 
 /**
@@ -37,6 +36,15 @@ if (global.window === undefined) {
 }
 
 const defineLazyObjectProperty = require('defineLazyObjectProperty');
+
+// Set up collections
+const _shouldPolyfillCollection = require('_shouldPolyfillES6Collection');
+if (_shouldPolyfillCollection('Map')) {
+  polyfillGlobal('Map', () => require('Map'));
+}
+if (_shouldPolyfillCollection('Set')) {
+  polyfillGlobal('Set', () => require('Set'));
+}
 
 /**
  * Sets an object's property. If a property with the same name exists, this will
@@ -92,12 +100,8 @@ if (!global.process.env.NODE_ENV) {
 // Setup the Systrace profiling hooks if necessary
 if (global.__RCTProfileIsProfiling) {
   const Systrace = require('Systrace');
+  Systrace.installReactHook(true);
   Systrace.setEnabled(true);
-}
-
-if (__DEV__ && global.performance === undefined) {
-  const Systrace = require('Systrace');
-  global.performance = Systrace.getUserTimingPolyfill();
 }
 
 // Set up console
@@ -110,9 +114,7 @@ if (!global.__fbDisableExceptionsManager) {
     try {
       ExceptionsManager.handleException(e, isFatal);
     } catch (ee) {
-      /* eslint-disable no-console-disallow */
       console.log('Failed to print error: ', ee.message);
-      /* eslint-enable no-console-disallow */
       throw e;
     }
   };
@@ -121,14 +123,9 @@ if (!global.__fbDisableExceptionsManager) {
   ErrorUtils.setGlobalHandler(handleError);
 }
 
-// Set up collections
-const _shouldPolyfillCollection = require('_shouldPolyfillES6Collection');
-if (_shouldPolyfillCollection('Map')) {
-  polyfillGlobal('Map', () => require('Map'));
-}
-if (_shouldPolyfillCollection('Set')) {
-  polyfillGlobal('Set', () => require('Set'));
-}
+// Check for compatibility between the JS and native code
+const ReactNativeVersionCheck = require('ReactNativeVersionCheck');
+ReactNativeVersionCheck.checkVersions();
 
 // Set up Promise
 // The native Promise implementation throws the following error:
@@ -140,6 +137,9 @@ polyfillGlobal('regeneratorRuntime', () => {
   // The require just sets up the global, so make sure when we first
   // invoke it the global does not exist
   delete global.regeneratorRuntime;
+  /* $FlowFixMe(>=0.54.0 site=react_native_oss) This comment suppresses an
+   * error found when Flow v0.54 was deployed. To see the error delete this
+   * comment and run Flow. */
   require('regenerator-runtime/runtime');
   return global.regeneratorRuntime;
 });
@@ -204,6 +204,27 @@ BatchedBridge.registerLazyCallableModule('RCTDeviceEventEmitter', () => require(
 BatchedBridge.registerLazyCallableModule('RCTNativeAppEventEmitter', () => require('RCTNativeAppEventEmitter'));
 BatchedBridge.registerLazyCallableModule('PerformanceLogger', () => require('PerformanceLogger'));
 
+global.fetchSegment = function(
+  segmentId: number,
+  callback: (?Error) => void,
+) {
+  const {SegmentFetcher} = require('NativeModules');
+  if (!SegmentFetcher) {
+    throw new Error('SegmentFetcher is missing. Please ensure that it is ' +
+      'included as a NativeModule.');
+  }
+
+  SegmentFetcher.fetchSegment(segmentId, (errorObject: ?{message: string, code: string}) => {
+    if (errorObject) {
+      const error = new Error(errorObject.message);
+      (error: any).code = errorObject.code;
+      callback(error);
+    }
+
+    callback(null);
+  });
+};
+
 // Set up devtools
 if (__DEV__) {
   if (!global.__RCTProfileIsProfiling) {
@@ -217,6 +238,12 @@ if (__DEV__) {
 
     // Set up inspector
     const JSInspector = require('JSInspector');
+    /* $FlowFixMe(>=0.56.0 site=react_native_oss) This comment suppresses an
+     * error found when Flow v0.56 was deployed. To see the error delete this
+     * comment and run Flow. */
+    /* $FlowFixMe(>=0.56.0 site=react_native_fb,react_native_oss) This comment
+     * suppresses an error found when Flow v0.56 was deployed. To see the error
+     * delete this comment and run Flow. */
     JSInspector.registerAgent(require('NetworkAgent'));
   }
 }
