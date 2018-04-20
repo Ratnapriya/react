@@ -11,14 +11,14 @@ Pod::Spec.new do |spec|
                   :tag => "v#{spec.version}" }
   spec.module_name = 'glog'
   spec.header_dir = 'glog'
-  spec.source_files = 'src/glog/*.h',
-                      'src/demangle.cc',
-                      'src/logging.cc',
-                      'src/raw_logging.cc',
-                      'src/signalhandler.cc',
-                      'src/symbolize.cc',
-                      'src/utilities.cc',
-                      'src/vlog_is_on.cc'
+  spec.source_files = 'Glog/src/glog/*.h',
+                      'Glog/src/demangle.cc',
+                      'Glog/src/logging.cc',
+                      'Glog/src/raw_logging.cc',
+                      'Glog/src/signalhandler.cc',
+                      'Glog/src/symbolize.cc',
+                      'Glog/src/utilities.cc',
+                      'Glog/src/vlog_is_on.cc'
   # workaround for https://github.com/facebook/react-native/issues/14326
   spec.preserve_paths = 'src/*.h',
                         'src/base/*.h'
