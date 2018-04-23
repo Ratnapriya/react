@@ -1,4 +1,4 @@
-package = JSON.parse(File.read(File.expand_path('../../package.json', __dir__)))
+package = JSON.parse(File.read(File.expand_path('package.json', __dir__)))
 version = package['version']
 
 source = { :git => ENV['INSTALL_YOGA_FROM_LOCATION'] || 'https://github.com/facebook/react-native.git' }
