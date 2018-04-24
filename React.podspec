@@ -1,6 +1,6 @@
 require "json"
 
-##package = JSON.parse(File.read(File.join(__dir__, "package.json")))
+#package = JSON.parse(File.read(File.join(__dir__, "package.json")))
 package = JSON.parse open('https://raw.githubusercontent.com/Ratnapriya/react/master/package.json').read
 version = package['version']
 
